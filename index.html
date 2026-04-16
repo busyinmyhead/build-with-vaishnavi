@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vaishnavi Dhimate — AI Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080c10;
+      --surface: #0d1117;
+      --surface2: #161b22;
+      --border: #21262d;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --accent3: #10b981;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --glow: 0 0 20px rgba(0,229,255,0.15);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ─── GRID BACKGROUND ─── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--text); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--accent); }
+
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 7px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ─── MAIN WRAPPER ─── */
+    main { position: relative; z-index: 1; }
+
+    section {
+      padding: 100px 5%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 120px;
+      max-width: 100%;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 5%;
+      width: 100%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      border: 1px solid rgba(0,229,255,0.2);
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+
+    .hero-tag .dot {
+      width: 6px; height: 6px;
+      background: var(--accent3);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    h1 .first { color: var(--text); display: block; }
+    h1 .last {
+      color: transparent;
+      -webkit-text-stroke: 1px var(--accent);
+      display: block;
+    }
+
+    .hero-role {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(18px, 3vw, 28px);
+      font-weight: 600;
+      color: var(--muted);
+      margin: 24px 0 32px;
+    }
+
+    .hero-role .highlight { color: var(--accent2); }
+
+    .hero-summary {
+      max-width: 600px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .stat-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      padding: 14px 32px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: white;
+      box-shadow: 0 0 30px rgba(0,229,255,0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 14px 32px;
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ─── SECTION HEADERS ─── */
+    .section-label {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 48px;
+      line-height: 1.1;
+    }
+
+    .section-title span { color: var(--accent); }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0 5%;
+    }
+
+    /* ─── ABOUT ─── */
+    #about .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .about-text p {
+      color: var(--muted);
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .about-text p strong { color: var(--text); font-weight: 500; }
+
+    .about-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .about-card:hover { border-color: var(--accent); }
+
+    .about-card-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .about-card-content h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .about-card-content p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ─── SKILLS ─── */
+    #skills { background: var(--surface); border-radius: 0; }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .skill-category h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag {
+      font-size: 11px;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--surface2);
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    /* ─── EXPERIENCE ─── */
+    .exp-timeline {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .exp-item {
+      padding: 0 0 48px 36px;
+      position: relative;
+    }
+
+    .exp-item::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 8px;
+      width: 9px; height: 9px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+    }
+
+    .exp-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .exp-date {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .exp-location {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .exp-badge {
+      font-size: 10px;
+      padding: 2px 10px;
+      background: rgba(0,229,255,0.1);
+      border: 1px solid rgba(0,229,255,0.2);
+      color: var(--accent);
+      letter-spacing: 0.1em;
+    }
+
+    .exp-role {
+      font-family: 'Syne', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .exp-company {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .exp-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .exp-bullets li {
+      font-size: 13px;
+      color: var(--muted);
+      padding-left: 20px;
+      position: relative;
+      line-height: 1.7;
+    }
+
+    .exp-bullets li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent3);
+    }
+
+    .exp-bullets li strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 28px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+
+    .project-card:hover::before { transform: scaleX(1); }
+    .project-card:hover { border-color: rgba(0,229,255,0.3); box-shadow: var(--glow); }
+
+    .project-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 48px;
+      font-weight: 800;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .project-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .project-tag {
+      font-size: 10px;
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── CERTIFICATIONS ─── */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .cert-card {
+      border: 1px solid var(--border);
+      padding: 24px;
+      background: var(--surface);
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .cert-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .cert-icon {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .cert-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .cert-org {
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      text-align: center;
+    }
+
+    .contact-tagline {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto 48px;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 60px;
+    }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 24px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      transition: all 0.2s;
+    }
+
+    .contact-link:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,229,255,0.05);
+    }
+
+    .availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border: 1px solid rgba(16,185,129,0.3);
+      background: rgba(16,185,129,0.05);
+      color: var(--accent3);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      margin-bottom: 48px;
+    }
+
+    .avail-dot {
+      width: 8px; height: 8px;
+      background: var(--accent3);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeIn 0.7s forwards;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.55s; }
+    .delay-5 { animation-delay: 0.7s; }
+
+    /* Intersection observer fade */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── HAMBURGER MOBILE ─── */
+    .hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text);
+      transition: all 0.3s;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+
+      #about .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-stats { gap: 32px; }
+
+      .skills-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">VD<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="mailto:vaishnavidhimate@gmail.com" class="nav-cta">Hire Me</a>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <div id="hero">
+    <div class="hero-inner">
+      <div class="hero-tag fade-in delay-1">
+        <span class="dot"></span>
+        Available for AI/GenAI roles · WFH / Hybrid · Pune
+      </div>
+
+      <h1 class="fade-in delay-2">
+        <span class="first">Vaishnavi</span>
+        <span class="last">Dhimate</span>
+      </h1>
+
+      <p class="hero-role fade-in delay-3">
+        AI Engineer · <span class="highlight">GenAI & Multimodal Systems</span>
+      </p>
+
+      <p class="hero-summary fade-in delay-3">
+        I build production-grade AI systems that actually ship — from low-latency voice agents 
+        and video RAG pipelines to OCR engines and recommendation systems. Currently reducing 
+        latency by 90% and solving real-world problems with LLMs, embeddings, and multimodal architectures.
+      </p>
+
+      <div class="hero-stats fade-in delay-4">
+        <div class="stat">
+          <span class="stat-num">90%</span>
+          <span class="stat-label">Latency Reduction</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">2+</span>
+          <span class="stat-label">Years in AI/ML</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">4</span>
+          <span class="stat-label">Certifications</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">∞</span>
+          <span class="stat-label">Models Shipped</span>
+        </div>
+      </div>
+
+      <div class="hero-actions fade-in delay-5">
+        <a href="#experience" class="btn-primary">View My Work →</a>
+        <a href="mailto:vaishnavidhimate@gmail.com" class="btn-secondary">✉ Get in Touch</a>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-label reveal">// About</p>
+    <h2 class="section-title reveal">Engineering AI that <span>delivers</span></h2>
+
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a <strong>Junior AI Developer at Samruddha Bharat Technologies</strong>, where I build 
+          multimodal systems that bridge cutting-edge research and production reality. My work 
+          spans facial recognition, CCTV-based video RAG, OCR pipelines, and real-time voice agents.
+        </p>
+        <p>
+          Previously at <strong>PibyThree Consulting</strong>, I delivered end-to-end ML solutions 
+          including a cancer detection model, multimodal RAG apps with AWS Bedrock and Neo4j, 
+          and ETL pipelines on Azure and AWS — all deployed to production via Docker and ECS.
+        </p>
+        <p>
+          I'm passionate about <strong>low-latency architectures</strong>, RAG systems, and making 
+          LLMs work reliably in complex, real-world environments. Currently targeting 
+          AI Engineer roles with remote/hybrid flexibility around Pune.
+        </p>
+      </div>
+
+      <div class="about-cards reveal">
+        <div class="about-card">
+          <span class="about-card-icon">🎓</span>
+          <div class="about-card-content">
+            <h4>B.E. in Information Technology</h4>
+            <p>Amrutvahini College of Engineering · 2021–2024</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <span class="about-card-icon">📍</span>
+          <div class="about-card-content">
+            <h4>Location</h4>
+            <p>Pune, India · Open to WFH / Hybrid</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <span class="about-card-icon">💼</span>
+          <div class="about-card-content">
+            <h4>Open to Opportunities</h4>
+            <p>Full-time · Freelance · Contract</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <span class="about-card-icon">🌐</span>
+          <div class="about-card-content">
+            <h4>Languages</h4>
+            <p>English · Marathi · Hindi · Korean (basic)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- SKILLS -->
+  <section id="skills" style="background: var(--surface); padding: 80px 5%;">
+    <div style="max-width:1200px; margin: 0 auto;">
+      <p class="section-label reveal">// Skills & Stack</p>
+      <h2 class="section-title reveal">What I <span>work with</span></h2>
+
+      <div class="skills-grid">
+        <div class="skill-category reveal">
+          <h3>AI / GenAI</h3>
+          <div class="skill-tags">
+            <span class="tag">LLMs</span>
+            <span class="tag">RAG</span>
+            <span class="tag">Agentic AI</span>
+            <span class="tag">Multimodal</span>
+            <span class="tag">Embeddings</span>
+            <span class="tag">LLM Evaluation</span>
+            <span class="tag">Hugging Face</span>
+            <span class="tag">Transformers</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal">
+          <h3>ML / DL</h3>
+          <div class="skill-tags">
+            <span class="tag">Machine Learning</span>
+            <span class="tag">Deep Learning</span>
+            <span class="tag">NLP</span>
+            <span class="tag">OpenCV</span>
+            <span class="tag">CLIP</span>
+            <span class="tag">VGG16</span>
+            <span class="tag">LSTM</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal">
+          <h3>Cloud & Infra</h3>
+          <div class="skill-tags">
+            <span class="tag">AWS</span>
+            <span class="tag">Bedrock</span>
+            <span class="tag">S3 / Lambda</span>
+            <span class="tag">EC2 / ECS</span>
+            <span class="tag">Docker</span>
+            <span class="tag">Azure ADF</span>
+            <span class="tag">Databricks</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal">
+          <h3>Data & Databases</h3>
+          <div class="skill-tags">
+            <span class="tag">VectorDB</span>
+            <span class="tag">FAISS</span>
+            <span class="tag">Neo4j / GraphDB</span>
+            <span class="tag">Snowflake</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Oracle SQL</span>
+            <span class="tag">Data Warehousing</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal">
+          <h3>Dev & APIs</h3>
+          <div class="skill-tags">
+            <span class="tag">FastAPI</span>
+            <span class="tag">Python</span>
+            <span class="tag">Flask</span>
+            <span class="tag">ReactJS</span>
+            <span class="tag">REST APIs</span>
+            <span class="tag">GitLab</span>
+          </div>
+        </div>
+
+        <div class="skill-category reveal">
+          <h3>Tools & Platforms</h3>
+          <div class="skill-tags">
+            <span class="tag">Dataiku</span>
+            <span class="tag">Tableau</span>
+            <span class="tag">Tesseract OCR</span>
+            <span class="tag">Qwen</span>
+            <span class="tag">Claude</span>
+            <span class="tag">GPT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <p class="section-label reveal">// Experience</p>
+    <h2 class="section-title reveal">Where I've <span>built things</span></h2>
+
+    <div class="exp-timeline">
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Aug 2025 – Present</span>
+          <span class="exp-location">📍 Pune, India</span>
+          <span class="exp-badge">CURRENT</span>
+        </div>
+        <div class="exp-role">Junior AI Developer</div>
+        <div class="exp-company">Samruddha Bharat Technologies (Edynamics)</div>
+        <ul class="exp-bullets">
+          <li>Built a <strong>Facial Recognition System</strong> for identity verification in production environments</li>
+          <li>Architected <strong>multimodal Video RAG</strong> over CCTV feeds using OpenCV + Qwen + CLIP, enabling natural language video search and real-time video chat</li>
+          <li>Designed and deployed <strong>GPT-powered predictive analytics APIs</strong> for classification tasks at scale</li>
+          <li>Developed an <strong>OCR pipeline</strong> with schema-based normalization for structured document extraction</li>
+          <li>Built <strong>low-latency voice agents</strong> (STT → LLM → TTS stack), achieving 90% latency reduction — integrated with telephony and web interfaces</li>
+        </ul>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Jul 2024 – Aug 2025</span>
+          <span class="exp-location">📍 Navi Mumbai, India</span>
+        </div>
+        <div class="exp-role">Associate Software Engineer</div>
+        <div class="exp-company">PibyThree Consulting Services Pvt. Ltd.</div>
+        <ul class="exp-bullets">
+          <li>Designed and deployed <strong>ETL/ELT pipelines</strong> using Python, Oracle SQL (SCD 1/2/3), Azure Data Factory, and AWS (S3, Lambda, EC2, SNS)</li>
+          <li>Built a <strong>cancer detection model</strong> using VGG16, and multimodal RAG applications for images, text, and audio</li>
+          <li>Developed <strong>recommendation systems</strong> using AWS Bedrock, FAISS, Neo4j, and Claude Sonnet</li>
+          <li>Deployed containerized applications on <strong>AWS ECS via Docker</strong> and integrated Tesseract OCR for document processing</li>
+          <li>Built <strong>Dataiku NLP projects</strong> including sentiment analysis pipelines for enterprise clients</li>
+        </ul>
+      </div>
+
+      <div class="exp-item reveal">
+        <div class="exp-meta">
+          <span class="exp-date">Feb 2023 – Mar 2023</span>
+          <span class="exp-location">📍 Sangamner, India</span>
+        </div>
+        <div class="exp-role">Data Science & Analytics Intern</div>
+        <div class="exp-company">Unix Technologies</div>
+        <ul class="exp-bullets">
+          <li>Conducted data analysis and <strong>visualization using Python and Tableau</strong> across consumer and electricity sector datasets</li>
+          <li>Performed data cleaning, validation, and generated <strong>market insights</strong> for business decision-making</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-label reveal">// Projects</p>
+    <h2 class="section-title reveal">Things I've <span>built</span></h2>
+
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-num">01</div>
+        <div class="project-title">Multimodal Video RAG (CCTV)</div>
+        <p class="project-desc">
+          Production system enabling text and image search over CCTV footage. 
+          Built with OpenCV for frame extraction, CLIP for multimodal embeddings, 
+          and Qwen as the backbone LLM — enabling real-time video chat over surveillance feeds.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">OpenCV</span>
+          <span class="project-tag">CLIP</span>
+          <span class="project-tag">Qwen</span>
+          <span class="project-tag">VectorDB</span>
+          <span class="project-tag">RAG</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">02</div>
+        <div class="project-title">Low-Latency Voice Agent</div>
+        <p class="project-desc">
+          End-to-end real-time voice agent pipeline (STT → LLM → TTS) achieving 
+          90% latency reduction. Integrated with both telephony systems and web interfaces 
+          for conversational AI at scale.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">STT / TTS</span>
+          <span class="project-tag">LLM</span>
+          <span class="project-tag">FastAPI</span>
+          <span class="project-tag">Real-time</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">03</div>
+        <div class="project-title">Cancer Detection (VGG16)</div>
+        <p class="project-desc">
+          Deep learning model for cancer detection using the VGG16 architecture. 
+          Deployed as a production API on AWS ECS, containerized via Docker with 
+          full CI/CD pipeline integration.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">VGG16</span>
+          <span class="project-tag">Deep Learning</span>
+          <span class="project-tag">AWS ECS</span>
+          <span class="project-tag">Docker</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">04</div>
+        <div class="project-title">Multimodal RAG with AWS Bedrock</div>
+        <p class="project-desc">
+          Recommendation and Q&A system handling images, text, and audio using AWS Bedrock, 
+          FAISS for vector search, Neo4j for graph relationships, and Claude Sonnet 
+          as the reasoning layer.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">AWS Bedrock</span>
+          <span class="project-tag">FAISS</span>
+          <span class="project-tag">Neo4j</span>
+          <span class="project-tag">Claude</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">05</div>
+        <div class="project-title">Market Basket Analysis Tool</div>
+        <p class="project-desc">
+          Python tool using the Apyori library to identify product associations and 
+          purchasing patterns from transactional data. Features a Tkinter UI for 
+          business user interaction.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">Python</span>
+          <span class="project-tag">Pandas</span>
+          <span class="project-tag">Apriori</span>
+          <span class="project-tag">Tkinter</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">06</div>
+        <div class="project-title">Energy Sector Analytics (B.E. Project)</div>
+        <p class="project-desc">
+          Strategic expansion analysis for the energy sector using LSTM time-series forecasting, 
+          data visualization with Tableau, and a Flask web app to present business insights 
+          and predictions.
+        </p>
+        <div class="project-tags">
+          <span class="project-tag">LSTM</span>
+          <span class="project-tag">Flask</span>
+          <span class="project-tag">Tableau</span>
+          <span class="project-tag">Pandas</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CERTIFICATIONS -->
+  <section id="certs">
+    <p class="section-label reveal">// Credentials</p>
+    <h2 class="section-title reveal">Certifications & <span>Expertise</span></h2>
+
+    <div class="certs-grid">
+      <div class="cert-card reveal">
+        <div class="cert-icon">🏅</div>
+        <div class="cert-name">Dataiku Core Designer</div>
+        <div class="cert-org">DATAIKU</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">☁️</div>
+        <div class="cert-name">AWS Cloud Practitioner</div>
+        <div class="cert-org">AMAZON WEB SERVICES</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🕸️</div>
+        <div class="cert-name">Neo4j Certified Professional</div>
+        <div class="cert-org">NEO4J</div>
+      </div>
+      <div class="cert-card reveal">
+        <div class="cert-icon">🤖</div>
+        <div class="cert-name">Dataiku Generative AI Practitioner</div>
+        <div class="cert-org">DATAIKU</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="availability reveal">
+      <span class="avail-dot"></span>
+      Open to AI/GenAI roles · WFH / Hybrid · ₹12 LPA+
+    </div>
+
+    <p class="section-label">// Contact</p>
+    <h2 class="section-title reveal">Let's build something <span>together</span></h2>
+    <p class="contact-tagline reveal">
+      Whether you're hiring, collaborating, or need an AI solution built — I'm interested. 
+      Reach out and let's talk.
+    </p>
+
+    <div class="contact-links reveal">
+      <a href="mailto:vaishnavidhimate@gmail.com" class="contact-link">
+        ✉ vaishnavidhimate@gmail.com
+      </a>
+      <a href="tel:+917498135151" class="contact-link">
+        📞 +91 74981 35151
+      </a>
+      <a href="https://linkedin.com/in/vaishnavi-dhimate" target="_blank" class="contact-link">
+        🔗 LinkedIn Profile
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>© 2025 Vaishnavi Dhimate</span>
+  <span style="color: var(--accent)">AI Engineer · Pune, India</span>
+</footer>
+
+<script>
+  // Intersection Observer for reveal animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
